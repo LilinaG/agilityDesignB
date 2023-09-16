@@ -14,47 +14,73 @@ class ProjectController extends Controller
  
     public function index():JsonResource
     {
-        $projects = Project::all();
-        return view('projects.index', compact('projects'));
+        return ProjectResource::collection(Project::all());
     }
 
-    public function create():View
+    public function create(): JsonResponse
+{
+    $project = Project::create([
+        "title"=> $request->title,
+        "description"=> $request->description,
+        "photo"=>$request->photo,
+        "url"=>$request->url
+    ]);
+    return response()->json([
+        "status"=> true,
+   ], 200);
+}
+
+    public function store(ProjectRequest $request):JsonResponse
     {
-        $categories = Category::all();
-        return view('projects.create', compact('categories'))->with('success', 'Proyecto creado');  
+            $project = Project::create($request->all());
+            return response()->json([
+            'success'=> true,
+            'data'=> $project //vigilar aquí que podría ser mediante objeto
+        ], 201);//201 significa estado de registro creado satisfactoriamente
     }
 
-    public function store(ProjectRequest $request):RedirectResponse
+    public function edit($id): JsonResponse
     {
-        //Project::create($request->all());
-        //return redirect()->route('projects.index');
-        $data = $request->all();
-        $data['category_id'] = 1; // Asigna un valor predeterminado o el ID de una categoría válida
-        Project::create($data);
-        return redirect()->route('projects.index');
+        
+            $project = Project::find($id);
+        
+            if (!$project) {
+                return response()->json(['error' => 'Proyecto no encontrado'], 404);
+            }
+        
+            $categories = Category::all();
+        
+            return response()->json([
+                'project' => $project,
+                'categories' => $categories,
+                'message' => 'Recurso recuperado satisfactoriamente'
+            ], 200);
+    }
+    
+
+    public function update(ProjectRequest $request, $id):JsonResponse 
+    {
+        $project = Project::find($id);
+        $project->title = $request->title;
+        $project->description = $request->description;
+        $project->phot = $request->photo;
+        $project->save();
+        return response()->json([
+            'success'=> true,
+            'data'=> $project//Objeto??
+        ], 200);
+    }
+    public function show($id):JsonResponse 
+    {
+        $project = Project::find($id);
+        return response()->json($project, 200);
     }
 
-    public function edit(Project $project):View
+    public function destroy(string $id):JsonResponse 
     {
-        $categories = Category::all();
-        return view('projects.edit', compact ('project', 'categories'));
-    }
-
-    public function update(ProjectRequest $request, Project $project):RedirectResponse
-    {
-        $project->update($request->all());
-        $categories = Category::all();
-        return redirect()->route('projects.index', compact('project', 'categories'))->with('success', 'Proyecto modificado');
-    }
-
-    public function show(Project $project):View
-    {
-        return view('projects.show', compact('project'));
-    }
-
-    public function destroy(Project $project):RedirectResponse
-    {
-        $project->delete();
-        return redirect()->route('projects.index')->with('danger', 'Proyecto eliminado');
+        Project::find($id)->delete();
+        return response()->json([
+            'success'=> true
+        ], 200);
     }
 }
