@@ -18,7 +18,7 @@ class CategoryController extends Controller
     public function create(): JsonResponse
     {
         $category = Category::create([
-            "name_category"=> $request->name_category
+            "name"=> $request->name
         ]);
         return response()->json([
             "status"=> true,
