@@ -4,11 +4,20 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+
 
 class Project extends Model
 {
-    use HasFactory; // Utilizar el trait HasFactory en este modelo
-    protected $guarded = [];// Propiedad para especificar qué atributos no se pueden asignar masivamente
+    use HasFactory;
+    
+    protected $guarded = [];
+    protected $hidden = ['created_at', 'updated_at'];
 
-    protected $hidden = ['created_at', 'updated_at'];//Ocultar peticiones del crud que queremos que no se vean 
+    // public function category(): BelongsTo {
+    //     return $this->belongsTo(Category::class);
+    // }
+    public function category(): BelongsTo { // Cambia HasMany por BelongsTo
+        return $this->belongsTo(Category::class);
+    }
 }

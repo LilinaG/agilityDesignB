@@ -12,31 +12,59 @@ use Illuminate\Http\Resources\Json\JsonResource;
 class ProjectController extends Controller
 {
  
-    public function index():JsonResource
+    public function index():JsonResponse
     {
-        return ProjectResource::collection(Project::all());
+        //return ProjectResource::collection(Project::all());
+        return response()->json(Project::all(), 200);
     }
 
-    public function create(): JsonResponse
+   
+
+//     $project = Project::create([
+//         "title"=> $request->title,
+//         "description"=> $request->description,
+//         "photo"=>$request->photo,
+//         "url"=>$request->url
+//     ]);
+//     return response()->json([
+//         "status"=> true,
+//    ], 200);
+
+   public function create(Request $request): JsonResponse
 {
     $project = Project::create([
-        "title"=> $request->title,
-        "description"=> $request->description,
-        "photo"=>$request->photo,
-        "url"=>$request->url
+        "title" => $request->title,
+        "description" => $request->description,
+        "image" => $request->image,
+        "url" => $request->url,
+        "category_id"=>$request->name
     ]);
+
     return response()->json([
-        "status"=> true,
-   ], 200);
+        "status" => true,
+    ], 200);
 }
 
+
+
+
     public function store(ProjectRequest $request):JsonResponse
+
     {
-            $project = Project::create($request->all());
-            return response()->json([
-            'success'=> true,
-            'data'=> $project //vigilar aquí que podría ser mediante objeto
-        ], 201);//201 significa estado de registro creado satisfactoriamente
+        $data = $request->only(['title', 'description', 'image', 'url', 'category_id']);
+
+        $project = Project::create($data);
+    
+        return response()->json([
+            'success' => true,
+            'data' => $project
+        ], 201);
+
+        //     $project = Project::create($request->all());
+        //     return response()->json([
+        //     'success'=> true,
+        //     'data'=> $project //vigilar aquí que podría ser mediante objeto
+        // ], 201);//201 significa estado de registro creado satisfactoriamente
     }
 
     public function edit($id): JsonResponse
@@ -63,7 +91,10 @@ class ProjectController extends Controller
         $project = Project::find($id);
         $project->title = $request->title;
         $project->description = $request->description;
-        $project->phot = $request->photo;
+        $project->image = $request->image;
+        $project->url = $request->url;
+        $project->url = $request->url;
+        $project->category_id = $request->category_id;
         $project->save();
         return response()->json([
             'success'=> true,
@@ -76,11 +107,19 @@ class ProjectController extends Controller
         return response()->json($project, 200);
     }
 
-    public function destroy(string $id):JsonResponse 
+    public function destroy(int $id):JsonResponse 
     {
-        Project::find($id)->delete();
+        $project = Project::find($id);
+        if (!$project) {
+            return response()->json(['error' => 'Proyecto no encontrado'], 404);
+        }
+        $project->delete();
         return response()->json([
-            'success'=> true
+            'success' => true
         ], 200);
+        // Project::find($id)->delete();
+        // return response()->json([
+        //     'success'=> true
+        // ], 200);
     }
 }
