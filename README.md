@@ -1,7 +1,7 @@
 <h1 align="center"> Agility Design </h1>
 # Plataforma de Diseño Gráfico y Desarrollo Web
 
-![paginaInicio]
+![paginaInicio](https://github.com/LilinaG/agilityDesignB/blob/feature/readme/resources/assets/paginaInicio.png)
 
 ## Descripción del Proyecto
 Este respositorio corresponde a la parte de Backend de Agility Design. Este proyecto consiste en el desarrollo de una plataforma web profesional que ofrece servicios integrales de diseño gráfico y desarrollo web. La plataforma permite a los usuarios explorar servicios, ver portfolios de trabajos anteriores, solicitar presupuestos y ponerse en contacto con profesionales del diseño y desarrollo web.
