@@ -38,7 +38,6 @@ class ProjectControllerTest extends TestCase
 
     public function test_create_project()
 {
-    // Datos de ejemplo para crear un proyecto
     $data = [
         'title' => 'Nuevo Proyecto',
         'description' => 'Descripción del nuevo proyecto',
@@ -48,14 +47,8 @@ class ProjectControllerTest extends TestCase
     ];
 
     $response = $this->post('api/admin/projects', $data);
-
-    // Verificar que la creación sea exitosa (código de respuesta 201)
     $response->assertStatus(201);
-
-    // Verificar la estructura del JSON de respuesta
     $response->assertJsonStructure(['title', 'description', 'image', 'url', 'category_id']);
-
-    // Verificar que el proyecto se haya creado correctamente en la base de datos
     $this->assertDatabaseHas('projects', $data);
 }
 
