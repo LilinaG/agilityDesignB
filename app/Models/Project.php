@@ -13,11 +13,16 @@ class Project extends Model
     
     protected $guarded = [];
     protected $hidden = ['created_at', 'updated_at'];
+    protected $fillable = [
+        'title',
+        'description',
+        'image',
+        'url',
+        'category_id',
+    ];
 
-    // public function category(): BelongsTo {
-    //     return $this->belongsTo(Category::class);
-    // }
-    public function category(): BelongsTo { // Cambia HasMany por BelongsTo
+    
+    public function category(): BelongsTo { 
         return $this->belongsTo(Category::class);
     }
 }

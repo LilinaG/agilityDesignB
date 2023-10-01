@@ -30,8 +30,8 @@ class CategoryController extends Controller
                 $category = Category::create($request->all());
                 return response()->json([
                 'success'=> true,
-                'data'=> $category //vigilar aquí que podría ser mediante objeto
-            ], 201);//201 significa estado de registro creado satisfactoriamente
+                'data'=> $category 
+            ], 201);
         }
 
         public function destroy(string $id):JsonResponse 

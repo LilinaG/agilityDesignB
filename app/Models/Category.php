@@ -13,7 +13,7 @@ class Category extends Model
     protected $guarded = [];
     protected $hidden = ['created_at', 'updated_at'];
     
-    public function projects(): HasMany { // Cambia el tipo de retorno a HasMany
+    public function projects(): HasMany { 
         return $this->hasMany(Project::class);
     }
 }
