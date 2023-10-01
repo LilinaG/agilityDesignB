@@ -1,5 +1,5 @@
 <h1 align="center"> Agility Design </h1>
-# Plataforma de Diseño Gráfico y Desarrollo Web
+<h2 align="center">Plataforma de Diseño Gráfico y Desarrollo Web </h2>
 
 ![paginaInicio](https://github.com/LilinaG/agilityDesignB/blob/feature/readme/resources/assets/paginaInicio.png)
 
