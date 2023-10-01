@@ -7,34 +7,56 @@ use App\Models\Project;
 
 class ProjectControllerTest extends TestCase
 {
-    use RefreshDatabase;
-
-    public function testIndex()
+    public function test_get_projects_list()
     {
-        $response = $this->get('/projects'); // Reemplaza '/projects' con la ruta real de tu index
+        $response = $this->get('api/admin/projects');
         $response->assertStatus(200);
-        // Agrega más aserciones según sea necesario para verificar el contenido de la respuesta.
+        $response->assertJsonStructure([
+            ['title',
+            'description',
+            'image',
+            'url',
+            'category_id',]
+        ]);
+        $response->assertJsonFragment(['title' => 'Logo Club Canino Xanastur' ]);
+        $response->assertJsonCount(4);
     }
 
-    public function testStore()
+    public function test_get_project_detail()
     {
-        $data = [
-            'title' => 'Nuevo Proyecto',
-            'description' => 'Descripción del proyecto',
-            'photo' => 'Imagen del proyecto',
-            // Agrega más datos según sea necesario para el método store.
-        ];
-
-        $response = $this->post('/projects', $data); // Reemplaza '/projects' con la ruta real de tu store
-        $response->assertStatus(201);
-        // Agrega más aserciones según sea necesario para verificar la respuesta y los datos almacenados en la base de datos.
+        $response = $this->get('api/admin/projects/1');
+        $response->assertJsonStructure(['title','description','image','url','category_id',]);
+        $response->assertJsonFragment(['title' => 'Logo Club Canino Xanastur' ]);
     }
 
-    public function testShow()
-    {
-        $project = Project::factory()->create(); // Crea un proyecto ficticio para la prueba
-        $response = $this->get("/projects/{$project->id}"); // Reemplaza '/projects/{$project->id}' con la ruta real de tu show
-        $response->assertStatus(200);
-        // Agrega más aserciones según sea necesario para verificar el contenido de la respuesta.
-    }
+    // public function test_get_non_existing_user_detail()
+    // {
+    //     $response = $this->get('api/admin/projects/255');
+    //     $response->assertStatus(404);
+    // }
+
+
+    public function test_create_project()
+{
+    // Datos de ejemplo para crear un proyecto
+    $data = [
+        'title' => 'Nuevo Proyecto',
+        'description' => 'Descripción del nuevo proyecto',
+        'image' => 'imagen.png',
+        'url' => 'https://ejemplo.com',
+        'category_id' => 1
+    ];
+
+    $response = $this->post('api/admin/projects', $data);
+
+    // Verificar que la creación sea exitosa (código de respuesta 201)
+    $response->assertStatus(201);
+
+    // Verificar la estructura del JSON de respuesta
+    $response->assertJsonStructure(['title', 'description', 'image', 'url', 'category_id']);
+
+    // Verificar que el proyecto se haya creado correctamente en la base de datos
+    $this->assertDatabaseHas('projects', $data);
+}
+
 }
